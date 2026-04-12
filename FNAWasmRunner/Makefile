@@ -1,5 +1,5 @@
 clean:
-	rm -rvf statics obj bin FNA || true
+	rm -rvf obj bin FNA || true
 
 build:
 	dotnet publish -c Release -v d
