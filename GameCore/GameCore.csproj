@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FNANative\FNA.Core.Native.csproj" />
+      <ProjectReference Include="..\FNANative\FNA.Core.csproj" />
     </ItemGroup>
 
 </Project>
