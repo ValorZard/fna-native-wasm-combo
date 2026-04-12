@@ -28,4 +28,4 @@ CSC : error CS2012: Cannot open 'C:\workspace\fna-game\FNAWasm\obj_core\Release\
 - The web version will exist on ``http://localhost:5000/``
 
 ## Notes
-Thanks to @r58Playz for the inspiration/borrowed code from (FNA-Wasm-Threads)[https://github.com/r58Playz/fna-wasm-threads] to make this work
+Thanks to @r58Playz for the inspiration/borrowed code from [FNA-Wasm-Threads](https://github.com/r58Playz/fna-wasm-threads) to make this work
