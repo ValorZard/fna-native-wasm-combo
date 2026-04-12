@@ -19,4 +19,9 @@ Then, to run the native version just do
 To run the web version
 - do ``dotnet run do_wasm.cs serve``
 - (if you need to clean, you can do ``dotnet run do_wasm.cs serve clean``)
+- Note: sometimes the script might fail with an error like this
+```
+CSC : error CS2012: Cannot open 'C:\workspace\fna-game\FNAWasm\obj_core\Release\net8.0\FNA.dll' for writing -- The process cannot access the file 'C:\workspace\fna-game\FNAWasm\obj_core\Release\net8.0\FNA.dll' because it is being used by another process.; file may be locked by 'VBCSCompiler' (54356)
+```
+- Just retry the script again and it should work
 - The web version will exist on ``http://localhost:5000/``
