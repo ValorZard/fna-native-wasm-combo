@@ -17,5 +17,6 @@ Then, to run the native version just do
 - ``dotnet run --project FNANativeRunner``
 
 To run the web version
-- do ``cd FNAWasmRunner`` and then ``make serve``
+- do ``dotnet run do_wasm.cs serve``
+- (if you need to clean, you can do ``dotnet run do_wasm.cs serve clean``)
 - The web version will exist on ``http://localhost:5000/``
