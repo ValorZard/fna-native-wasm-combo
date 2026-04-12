@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 static void PatchFile(string filePath, string oldText, string newText)
 {
@@ -19,12 +20,35 @@ static void PatchFile(string filePath, string oldText, string newText)
 
 // get args flags for the script
 bool doServe = false;
+bool doClean = false;
 foreach (String arg in args)
 {
-    if (arg == "serve")
+    switch (arg)
     {
-        doServe = true;
+        case "serve":
+            doServe = true;
+            break;
+        case "clean":
+            doClean = true;
+            break;
     }
+}
+
+if (doClean)
+{
+    Console.WriteLine("Cleaning project...");
+    var cleanProcess = new Process
+    {
+        StartInfo = new ProcessStartInfo
+        {
+            FileName = "dotnet",
+            Arguments = "clean -c Release -v d",
+            WorkingDirectory = "FNAWasmRunner",
+        }
+    };
+    cleanProcess.Start();
+    cleanProcess.WaitForExit();
+    Console.WriteLine("Finished cleaning project");
 }
 
 // Publish the project to get the latest framework files
