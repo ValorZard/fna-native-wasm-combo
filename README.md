@@ -9,7 +9,7 @@ Then, to run the native version just do
 - ``dotnet run --project FNANativeRunner``
 
 To run the web version
-- Make sure to put the patched FNA binaries from [FNA-WASM-Build](https://github.com/r58Playz/FNA-WASM-Build) in FNAWasmRunner/statics
+- Make sure to put the patched FNA binaries from [FNA-WASM-Build](https://github.com/r58Playz/FNA-WASM-Build) in ``FNAWasmRunner/statics``
 - The ones you need are:
     - ``FNA3D.a``
     - ``FAudio.a``
