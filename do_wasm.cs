@@ -18,6 +18,51 @@ static void PatchFile(string filePath, string oldText, string newText)
     Console.WriteLine($"Patched {Path.GetFileName(filePath)}");
 }
 
+static async Task CopyBinaries()
+{
+    Console.WriteLine("Now copying files from FNA-WASM-Build...");
+    if (Directory.Exists("FNAWasmRunner\\statics"))
+    {
+        Directory.Delete("FNAWasmRunner\\statics", true);
+    }
+    try
+    {
+        Directory.CreateDirectory("FNAWasmRunner\\statics");
+        using var client = new HttpClient();
+
+        string staticsRelease = "eb111fb8-7474-4f75-a1b7-848fc6293aa5";
+
+        string baseUrl = $"https://github.com/r58Playz/FNA-WASM-Build/releases/download/{staticsRelease}";
+        string outputDir = "FNAWasmRunner\\statics";
+
+        string[] files =
+        [
+            "FAudio.a",
+        "FNA3D.a",
+        "libmojoshader.a",
+        "SDL3.a"
+        ];
+
+        foreach (string file in files)
+        {
+            string sourceUrl = $"{baseUrl}/{file}";
+            string destinationPath = Path.Combine(outputDir, file);
+
+            Console.WriteLine($"Downloading {file}...");
+            using HttpResponseMessage response = await client.GetAsync(sourceUrl, HttpCompletionOption.ResponseHeadersRead);
+            response.EnsureSuccessStatusCode();
+
+            await using Stream source = await response.Content.ReadAsStreamAsync();
+            await using FileStream destination = File.Create(destinationPath);
+            await source.CopyToAsync(destination);
+        }
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine($"Error copying files: {e}");
+    }
+}
+
 // get args flags for the script
 bool doServe = false;
 bool doClean = false;
@@ -49,6 +94,12 @@ if (doClean)
     cleanProcess.Start();
     cleanProcess.WaitForExit();
     Console.WriteLine("Finished cleaning project");
+}
+
+// Copy the latest binaries from the releases of FNA-WASM-Build
+if (doClean || !Directory.Exists("FNAWasmRunner\\statics") || !Directory.GetFiles("FNAWasmRunner\\statics").Any())
+{
+    await CopyBinaries();
 }
 
 // Publish the project to get the latest framework files
