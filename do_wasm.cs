@@ -158,3 +158,5 @@ if (doServe)
     serveProcess.WaitForExit();
 }
 
+Console.WriteLine("Done! Press any key to exit...");
+Console.ReadKey();
