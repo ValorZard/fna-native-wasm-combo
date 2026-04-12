@@ -2,5 +2,6 @@
   <Project Path="FNANative/FNA.Core.Native.csproj" />
   <Project Path="FNANativeRunner/FNANativeRunner.csproj" />
   <Project Path="FNAWasm/FNA.Core.Wasm.csproj" />
+  <Project Path="FNAWasmRunner/template-net10.csproj" />
   <Project Path="GameCore/GameCore.csproj" />
 </Solution>
