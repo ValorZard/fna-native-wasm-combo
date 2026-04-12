@@ -10,5 +10,10 @@ Then, to run the native version just do
 
 To run the web version
 - Make sure to put the patched FNA binaries from [FNA-WASM-Build](https://github.com/r58Playz/FNA-WASM-Build) in FNAWasmRunner/statics
+- The ones you need are:
+    - ``FNA3D.a``
+    - ``FAudio.a``
+    - ``SDL3.a`` 
+    - and ``libmojoshader.a``
 - then, do ``cd FNAWasmRunner`` and then ``make serve``
 - The web version will exist on ``http://localhost:5000/``
