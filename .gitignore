@@ -5,6 +5,7 @@
 
 # FNA specific stuff
 /FNANative
+/FNAWasm
 
 # dotenv files
 .env
