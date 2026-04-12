@@ -1,13 +1,14 @@
 using System.Diagnostics;
 using System.Net.Http;
 
+String branch = "26.04";
 var nativeClone = new Process();
 var wasmClone = new Process();
 nativeClone.StartInfo.FileName = "git";
-nativeClone.StartInfo.Arguments = "clone https://github.com/FNA-XNA/FNA --recursive -b 26.04 FNANative";
+nativeClone.StartInfo.Arguments = $"clone https://github.com/FNA-XNA/FNA --recursive -b {branch} FNANative";
 nativeClone.Start();
 wasmClone.StartInfo.FileName = "git";
-wasmClone.StartInfo.Arguments = "clone https://github.com/FNA-XNA/FNA --recursive -b 26.04 FNAWasm";
+wasmClone.StartInfo.Arguments = $"clone https://github.com/FNA-XNA/FNA --recursive -b {branch} FNAWasm";
 wasmClone.Start();
 nativeClone.WaitForExit();
 wasmClone.WaitForExit();
