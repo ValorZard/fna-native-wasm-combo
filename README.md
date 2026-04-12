@@ -3,7 +3,8 @@ This project shows off a way to have FNA compile to both Native and Wasm.
 
 However, the big catch is that we need to clone FNA twice, and then have one version of FNA be patched in order to compile to WASM.
 
-In order to do the setup for both wasm and native, run ``dotnet run setup.cs``
+## Initial setup for both wasm and native
+run ``dotnet run setup.cs``
 
 ## running the native version:
 - First, grab the FNA binaries from [fnalibs-dailies](https://github.com/FNA-XNA/fnalibs-dailies), and put the ones that fit the architecture you are on right next to where your executable will be.
