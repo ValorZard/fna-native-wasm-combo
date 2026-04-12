@@ -1,0 +1,1 @@
+System.Diagnostics.Process.Start("git", "clone https://github.com/FNA-XNA/FNA --recursive -b 26.04 FNANative");
