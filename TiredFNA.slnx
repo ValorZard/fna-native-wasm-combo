@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="FNA/FNA.Core.csproj" />
-  <Project Path="TiredFNA/TiredFNA.csproj" />
+  <Project Path="FNANative/FNANative.csproj" />
+  <Project Path="GameCore/GameCore.csproj" />
 </Solution>

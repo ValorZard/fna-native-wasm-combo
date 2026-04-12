@@ -1,14 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-
+using GameCore;
 static class Program
 {
     [STAThread]
     static void Main(string[] args)
     {
-        using (Game g = new Game())
+        using (GameMain g = new GameMain())
         {
-            new GraphicsDeviceManager(g);
             g.Run();
         }
     }
