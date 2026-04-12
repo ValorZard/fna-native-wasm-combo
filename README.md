@@ -14,7 +14,15 @@ run ``dotnet run setup.cs``
 ## running the web version
 - do ``dotnet run do_wasm.cs serve``
 - (if you need to clean, you can do ``dotnet run do_wasm.cs serve clean``)
-- In case this is the first time running (or if you want a ``clean`` build), it will fetch the patched FNA binaries from [FNA-WASM-Build](https://github.com/r58Playz/FNA-WASM-Build) and put them in ``FNAWasmRunner/statics``
+- If this is your first time building a Wasm project with dotnet, you'll get this error
+```
+error NETSDK1147:
+  To build this project, the following workloads must be installed: wasm-tools
+  To install these workloads, run the following command: dotnet workload restore
+    Determining projects to restore...
+```
+- To fix it, just run ``dotnet workload restore`` to fix it.
+- Also, if this is the first time running this script (or if you want a ``clean`` build), it will fetch the patched FNA binaries from [FNA-WASM-Build](https://github.com/r58Playz/FNA-WASM-Build) and put them in ``FNAWasmRunner/statics``
 - The ones it will grab are:
     - ``FNA3D.a``
     - ``FAudio.a``
