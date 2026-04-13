@@ -79,24 +79,14 @@ public class GameMain : Game
 
         keyboardPrev = keyboardCur;
 
-        if (r != 255)
-        {
-            r++;
-            return;
-        }
-        if (g != 255)
-        {
-            g++;
-            return;
-        }
-        if (b != 255)
-        {
-            b++;
-            return;
-        }
-        r = 0;
-        g = 0;
-        b = 0;
+        // loop colors
+        r++;
+        if (r == 255) { r = 0;}
+        g++;
+        if (g == 255) { g = 0;}
+        b++;
+        if (b == 255) { b = 0;}
+        
     }
 
     protected override void Draw(GameTime gameTime)
