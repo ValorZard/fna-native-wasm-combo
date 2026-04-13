@@ -4,6 +4,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Net;
+using System.Text.Json;
 
 static void PatchFile(string filePath, string oldText, string newText)
 {
@@ -198,6 +199,19 @@ if (doServe)
         return Path.Combine("FNAWasmRunner", "wwwroot", normalized);
     }
 
+    // Generate content-files.json as a static file in wwwroot before serving
+    {
+        var root = Path.GetFullPath("Content");
+        var assets = Directory.Exists(root)
+            ? Directory.GetFiles(root, "*", SearchOption.AllDirectories)
+                .Select(f => Path.GetRelativePath(root, f).Replace('\\', '/'))
+                .ToArray()
+            : Array.Empty<string>();
+        var jsonPath = Path.Combine("FNAWasmRunner", "wwwroot", "content-files.json");
+        File.WriteAllText(jsonPath, JsonSerializer.Serialize(assets));
+        Console.WriteLine($"Generated {jsonPath} ({assets.Length} file(s))");
+    }
+
     using var listener = new HttpListener();
     listener.Prefixes.Add($"http://localhost:{port}/");
     listener.Start();
@@ -213,7 +227,10 @@ if (doServe)
         response.Headers["Cross-Origin-Embedder-Policy"] = "require-corp";
         response.Headers["Cross-Origin-Opener-Policy"] = "same-origin";
 
-        var filePath = ResolvePath(context.Request.Url?.AbsolutePath ?? "/");
+        var requestPath = context.Request.Url?.AbsolutePath ?? "/";
+        Console.WriteLine($"[REQ] {context.Request.HttpMethod} {requestPath}");
+
+        var filePath = ResolvePath(requestPath);
         if (filePath is null || !File.Exists(filePath))
         {
             response.StatusCode = 404;
