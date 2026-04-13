@@ -4,7 +4,6 @@ using System.Linq;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Net;
-using System.Text.Json;
 
 static void PatchFile(string filePath, string oldText, string newText)
 {
@@ -189,6 +188,11 @@ if (doServe)
             return Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "_framework", suffix);
         }
 
+        if (path == "/content-files.json")
+        {
+            return Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "content-files.json");
+        }
+
         // serve content files from the Content directory (should be copied to output on build)
         if (path.StartsWith("/Content", StringComparison.Ordinal))
         {
@@ -207,8 +211,9 @@ if (doServe)
                 .Select(f => Path.GetRelativePath(root, f).Replace('\\', '/'))
                 .ToArray()
             : Array.Empty<string>();
-        var jsonPath = Path.Combine("FNAWasmRunner", "wwwroot", "content-files.json");
-        File.WriteAllText(jsonPath, JsonSerializer.Serialize(assets));
+        var jsonPath = Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "content-files.json");
+        var json = "[" + string.Join(",", assets.Select(a => "\"" + a.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"")) + "]";
+        File.WriteAllText(jsonPath, json);
         Console.WriteLine($"Generated {jsonPath} ({assets.Length} file(s))");
     }
 
