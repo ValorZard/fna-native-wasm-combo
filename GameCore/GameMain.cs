@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace GameCore;
 using Microsoft.Xna.Framework;
@@ -26,6 +28,8 @@ public class GameMain : Game
     private SpriteBatch batch;
     
     private Texture2D texture;
+    private SoundEffect sound;
+    private KeyboardState keyboardPrev = new KeyboardState();
 
     protected override void Initialize()
     {
@@ -41,6 +45,7 @@ public class GameMain : Game
         // Create the batch...
         batch = new SpriteBatch(GraphicsDevice);
         texture = Content.Load<Texture2D>("images/popsicle");
+        sound = Content.Load<SoundEffect>("sounds/sfx_jump");
         base.LoadContent();
     }
 
@@ -49,6 +54,7 @@ public class GameMain : Game
         // Clean up after yourself!
         batch.Dispose();
         texture.Dispose();
+        sound.Dispose();
         base.UnloadContent();
     }
 
@@ -64,6 +70,15 @@ public class GameMain : Game
             lastUpdate = now;
             updateCount = 0;
         }
+        KeyboardState keyboardCur = Keyboard.GetState();
+
+        if (keyboardCur.IsKeyDown(Keys.Space) && keyboardPrev.IsKeyUp(Keys.Space))
+        {
+            sound.Play();
+        }
+
+        keyboardPrev = keyboardCur;
+
         if (r != 255)
         {
             r++;
