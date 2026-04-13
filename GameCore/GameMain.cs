@@ -40,9 +40,7 @@ public class GameMain : Game
         // Load textures, sounds, and so on in here...
         // Create the batch...
         batch = new SpriteBatch(GraphicsDevice);
-
-        // ... then load a texture from ./Content/FNATexture.png
-        texture = Content.Load<Texture2D>("popsicle");
+        texture = Content.Load<Texture2D>("images/popsicle");
         base.LoadContent();
     }
 
