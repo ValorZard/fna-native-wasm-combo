@@ -211,6 +211,7 @@ if (doServe)
                 .Select(f => Path.GetRelativePath(root, f).Replace('\\', '/'))
                 .ToArray()
             : Array.Empty<string>();
+        // we put it in the release folder since we don't actually want to commit this file since its a build artifact
         var jsonPath = Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "content-files.json");
         var json = "[" + string.Join(",", assets.Select(a => "\"" + a.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"")) + "]";
         File.WriteAllText(jsonPath, json);
