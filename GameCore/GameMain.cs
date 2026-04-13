@@ -1,4 +1,6 @@
-﻿namespace GameCore;
+﻿using Microsoft.Xna.Framework.Graphics;
+
+namespace GameCore;
 using Microsoft.Xna.Framework;
 public class GameMain : Game
 {
@@ -11,6 +13,9 @@ public class GameMain : Game
         gdm.PreferredBackBufferHeight = 512;
         gdm.IsFullScreen = false;
         gdm.SynchronizeWithVerticalRetrace = true;
+
+        // All content loaded will be in a "Content" folder
+        Content.RootDirectory = "Content";
     }
 
     byte r = 0;
@@ -18,6 +23,9 @@ public class GameMain : Game
     byte b = 0;
     DateTime lastUpdate = DateTime.UnixEpoch;
     int updateCount = 0;
+    private SpriteBatch batch;
+    
+    private Texture2D texture;
 
     protected override void Initialize()
     {
@@ -30,12 +38,19 @@ public class GameMain : Game
     protected override void LoadContent()
     {
         // Load textures, sounds, and so on in here...
+        // Create the batch...
+        batch = new SpriteBatch(GraphicsDevice);
+
+        // ... then load a texture from ./Content/FNATexture.png
+        texture = Content.Load<Texture2D>("popsicle");
         base.LoadContent();
     }
 
     protected override void UnloadContent()
     {
         // Clean up after yourself!
+        batch.Dispose();
+        texture.Dispose();
         base.UnloadContent();
     }
 
@@ -75,6 +90,10 @@ public class GameMain : Game
     {
         // Render stuff in here. Do NOT run game logic in here!
         GraphicsDevice.Clear(new Color(r, g, b));
+         // Draw the texture to the corner of the screen
+        batch.Begin();
+        batch.Draw(texture, Vector2.Zero, Color.White);
+        batch.End();
         base.Draw(gameTime);
     }
 }

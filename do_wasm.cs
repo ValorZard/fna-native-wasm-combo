@@ -188,6 +188,13 @@ if (doServe)
             return Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "_framework", suffix);
         }
 
+        // serve content files from the Content directory (should be copied to output on build)
+        if (path.StartsWith("/Content", StringComparison.Ordinal))
+        {
+            var suffix = path["/Content".Length..].TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
+            return Path.Combine("Content", suffix);
+        }
+
         return Path.Combine("FNAWasmRunner", "wwwroot", normalized);
     }
 
