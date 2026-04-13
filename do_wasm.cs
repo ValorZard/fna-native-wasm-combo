@@ -188,7 +188,34 @@ if (doServe)
             return Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "_framework", suffix);
         }
 
+        if (path == "/content-files.json")
+        {
+            return Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "content-files.json");
+        }
+
+        // serve content files from the Content directory (should be copied to output on build)
+        if (path.StartsWith("/Content", StringComparison.Ordinal))
+        {
+            var suffix = path["/Content".Length..].TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
+            return Path.Combine("Content", suffix);
+        }
+
         return Path.Combine("FNAWasmRunner", "wwwroot", normalized);
+    }
+
+    // Generate content-files.json as a static file in wwwroot before serving
+    {
+        var root = Path.GetFullPath("Content");
+        var assets = Directory.Exists(root)
+            ? Directory.GetFiles(root, "*", SearchOption.AllDirectories)
+                .Select(f => Path.GetRelativePath(root, f).Replace('\\', '/'))
+                .ToArray()
+            : Array.Empty<string>();
+        // we put it in the release folder since we don't actually want to commit this file since its a build artifact
+        var jsonPath = Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "content-files.json");
+        var json = "[" + string.Join(",", assets.Select(a => "\"" + a.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"")) + "]";
+        File.WriteAllText(jsonPath, json);
+        Console.WriteLine($"Generated {jsonPath} ({assets.Length} file(s))");
     }
 
     using var listener = new HttpListener();
@@ -206,7 +233,10 @@ if (doServe)
         response.Headers["Cross-Origin-Embedder-Policy"] = "require-corp";
         response.Headers["Cross-Origin-Opener-Policy"] = "same-origin";
 
-        var filePath = ResolvePath(context.Request.Url?.AbsolutePath ?? "/");
+        var requestPath = context.Request.Url?.AbsolutePath ?? "/";
+        Console.WriteLine($"[REQ] {context.Request.HttpMethod} {requestPath}");
+
+        var filePath = ResolvePath(requestPath);
         if (filePath is null || !File.Exists(filePath))
         {
             response.StatusCode = 404;

@@ -21,4 +21,7 @@
       <ProjectReference Include="..\FNAWasm\FNA.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="..\Content\**" TargetPath="Content\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
 </Project>

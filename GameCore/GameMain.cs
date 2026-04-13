@@ -1,4 +1,8 @@
-﻿namespace GameCore;
+﻿using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
+namespace GameCore;
 using Microsoft.Xna.Framework;
 public class GameMain : Game
 {
@@ -11,6 +15,9 @@ public class GameMain : Game
         gdm.PreferredBackBufferHeight = 512;
         gdm.IsFullScreen = false;
         gdm.SynchronizeWithVerticalRetrace = true;
+
+        // All content loaded will be in a "Content" folder
+        Content.RootDirectory = "Content";
     }
 
     byte r = 0;
@@ -18,6 +25,11 @@ public class GameMain : Game
     byte b = 0;
     DateTime lastUpdate = DateTime.UnixEpoch;
     int updateCount = 0;
+    private SpriteBatch batch;
+    
+    private Texture2D texture;
+    private SoundEffect sound;
+    private KeyboardState keyboardPrev = new KeyboardState();
 
     protected override void Initialize()
     {
@@ -30,12 +42,19 @@ public class GameMain : Game
     protected override void LoadContent()
     {
         // Load textures, sounds, and so on in here...
+        // Create the batch...
+        batch = new SpriteBatch(GraphicsDevice);
+        texture = Content.Load<Texture2D>("images/popsicle");
+        sound = Content.Load<SoundEffect>("sounds/sfx_jump");
         base.LoadContent();
     }
 
     protected override void UnloadContent()
     {
         // Clean up after yourself!
+        batch.Dispose();
+        texture.Dispose();
+        sound.Dispose();
         base.UnloadContent();
     }
 
@@ -51,30 +70,33 @@ public class GameMain : Game
             lastUpdate = now;
             updateCount = 0;
         }
-        if (r != 255)
+        KeyboardState keyboardCur = Keyboard.GetState();
+
+        if (keyboardCur.IsKeyDown(Keys.Space) && keyboardPrev.IsKeyUp(Keys.Space))
         {
-            r++;
-            return;
+            sound.Play();
         }
-        if (g != 255)
-        {
-            g++;
-            return;
-        }
-        if (b != 255)
-        {
-            b++;
-            return;
-        }
-        r = 0;
-        g = 0;
-        b = 0;
+
+        keyboardPrev = keyboardCur;
+
+        // loop colors
+        r++;
+        if (r == 255) { r = 0;}
+        g++;
+        if (g == 255) { g = 0;}
+        b++;
+        if (b == 255) { b = 0;}
+        
     }
 
     protected override void Draw(GameTime gameTime)
     {
         // Render stuff in here. Do NOT run game logic in here!
         GraphicsDevice.Clear(new Color(r, g, b));
+         // Draw the texture to the corner of the screen
+        batch.Begin();
+        batch.Draw(texture, Vector2.Zero, Color.White);
+        batch.End();
         base.Draw(gameTime);
     }
 }
