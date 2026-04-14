@@ -31,7 +31,7 @@ static async Task CopyBinaries()
         Directory.CreateDirectory("FNAWasmRunner\\statics");
         using var client = new HttpClient();
 
-        string staticsRelease = "eb111fb8-7474-4f75-a1b7-848fc6293aa5";
+        string staticsRelease = "07f3bc2e-5f6a-4f67-abac-b1fd06590148";
 
         string baseUrl = $"https://github.com/r58Playz/FNA-WASM-Build/releases/download/{staticsRelease}";
         string outputDir = "FNAWasmRunner\\statics";
