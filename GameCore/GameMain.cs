@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace GameCore;
 using Microsoft.Xna.Framework;
@@ -30,6 +31,7 @@ public class GameMain : Game
     private Texture2D texture;
     private SoundEffect sound;
     private KeyboardState keyboardPrev = new KeyboardState();
+    private Song song;
 
     protected override void Initialize()
     {
@@ -46,6 +48,7 @@ public class GameMain : Game
         batch = new SpriteBatch(GraphicsDevice);
         texture = Content.Load<Texture2D>("images/popsicle");
         sound = Content.Load<SoundEffect>("sounds/sfx_jump");
+        song = Content.Load<Song>("songs/The_Entertainer_-_Scott_Joplin");
         base.LoadContent();
     }
 
@@ -55,6 +58,7 @@ public class GameMain : Game
         batch.Dispose();
         texture.Dispose();
         sound.Dispose();
+        song.Dispose();
         base.UnloadContent();
     }
 
@@ -87,6 +91,13 @@ public class GameMain : Game
         b++;
         if (b == 255) { b = 0;}
         
+        // music 
+        // Just keep playing the song over and over
+        if (MediaPlayer.State == MediaState.Stopped)
+        {
+            MediaPlayer.Play(song);
+        }
+        
     }
 
     protected override void Draw(GameTime gameTime)
@@ -95,7 +106,7 @@ public class GameMain : Game
         GraphicsDevice.Clear(new Color(r, g, b));
          // Draw the texture to the corner of the screen
         batch.Begin();
-        batch.Draw(texture, Vector2.Zero, Color.White);
+        batch.Draw(texture, new Rectangle(100, 100, texture.Width / 5, texture.Height / 5), Color.White);
         batch.End();
         base.Draw(gameTime);
     }
