@@ -120,24 +120,12 @@ publishProcess.WaitForExit();
 Console.WriteLine("Finished publishing project");
 Console.WriteLine("Now patching framework files...");
 
-// Generate content-files.json into publish output for static hosting
-{
-    var root = Path.GetFullPath("Content");
-    var assets = Directory.Exists(root)
-        ? Directory.GetFiles(root, "*", SearchOption.AllDirectories)
-            .Select(f => Path.GetRelativePath(root, f).Replace('\\', '/'))
-            .ToArray()
-        : Array.Empty<string>();
-    var jsonPath = Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "content-files.json");
-    var json = "[" + string.Join(",", assets.Select(a => "\"" + a.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"")) + "]";
-    File.WriteAllText(jsonPath, json);
-    Console.WriteLine($"Generated {jsonPath} ({assets.Length} file(s))");
-}
-
-// Copy Content folder into publish output for static hosting
+// Copy Content folder + json into publish output for static hosting
 {
     var sourceRoot = Path.GetFullPath("Content");
     var destRoot = Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "Content");
+    var jsonPath = Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "content-files.json");
+    var json = "[";
     if (Directory.Exists(sourceRoot))
     {
         foreach (var file in Directory.GetFiles(sourceRoot, "*", SearchOption.AllDirectories))
@@ -146,9 +134,12 @@ Console.WriteLine("Now patching framework files...");
             var destPath = Path.Combine(destRoot, relativePath);
             Directory.CreateDirectory(Path.GetDirectoryName(destPath)!);
             File.Copy(file, destPath, true);
+            json += "\"" + relativePath.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\",";
         }
         Console.WriteLine($"Copied Content folder to {destRoot}");
     }
+    json += "]";
+    File.WriteAllText(jsonPath, json);
 }
 
 string frameworkDir = Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "_framework");
