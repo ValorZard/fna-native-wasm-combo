@@ -21,6 +21,8 @@
       <ProjectReference Include="..\FNAWasm\FNA.Core.csproj" />
     </ItemGroup>
 
+    <!-- We import all of our dependencies here, and pass through the FNAVariant property -->
+    <!-- This lets the dependencies know which variant of FNA to use at compile time -->
     <ItemGroup>
       <ProjectReference Include="..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj" Properties="FNAVariant=$(FNAVariant)" />
     </ItemGroup>
