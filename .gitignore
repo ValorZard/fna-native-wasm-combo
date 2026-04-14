@@ -7,6 +7,9 @@
 /FNANative
 /FNAWasm
 
+# Dependency directories
+/FontStashSharp
+
 # dotenv files
 .env
 

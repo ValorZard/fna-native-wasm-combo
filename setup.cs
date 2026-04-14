@@ -26,3 +26,18 @@ var nativePatch = new Process
 nativePatch.Start();
 nativePatch.WaitForExit();
 Console.WriteLine("Finished applying patches");
+
+Console.WriteLine("Now downloading dependencies...");
+Console.WriteLine("Downloading FontStashSharp...");
+var fontStashClone = new Process
+{
+    StartInfo = new ProcessStartInfo
+    {
+        FileName = "git",
+        Arguments = "clone https://github.com/FontStashSharp/FontStashSharp.git --recursive",
+    }
+};
+fontStashClone.Start();
+fontStashClone.WaitForExit();
+Console.WriteLine("Finished downloading FontStashSharp");
+

@@ -20,4 +20,10 @@
     <ItemGroup Condition="'$(FNAVariant)' == 'Wasm'">
       <ProjectReference Include="..\FNAWasm\FNA.Core.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj" Properties="FNAVariant=$(FNAVariant)" />
+    </ItemGroup>
+    
+    
 </Project>
