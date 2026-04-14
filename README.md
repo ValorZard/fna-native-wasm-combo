@@ -3,6 +3,8 @@ This project shows off a way to have FNA compile to both Native and Wasm.
 
 However, the big catch is that we need to clone FNA twice, and then have one version of FNA be patched in order to compile to WASM.
 
+We also show how to import external dependencies that require FNA (like [FontStashSharp](https://github.com/FontStashSharp/FontStashSharp)) by patching them to choose what FNA to use on compile time.
+
 ## Initial setup for both wasm and native
 run ``dotnet run setup.cs``
 
