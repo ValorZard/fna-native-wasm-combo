@@ -119,6 +119,38 @@ publishProcess.WaitForExit();
 
 Console.WriteLine("Finished publishing project");
 Console.WriteLine("Now patching framework files...");
+
+// Generate content-files.json into publish output for static hosting
+{
+    var root = Path.GetFullPath("Content");
+    var assets = Directory.Exists(root)
+        ? Directory.GetFiles(root, "*", SearchOption.AllDirectories)
+            .Select(f => Path.GetRelativePath(root, f).Replace('\\', '/'))
+            .ToArray()
+        : Array.Empty<string>();
+    var jsonPath = Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "content-files.json");
+    var json = "[" + string.Join(",", assets.Select(a => "\"" + a.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"")) + "]";
+    File.WriteAllText(jsonPath, json);
+    Console.WriteLine($"Generated {jsonPath} ({assets.Length} file(s))");
+}
+
+// Copy Content folder into publish output for static hosting
+{
+    var sourceRoot = Path.GetFullPath("Content");
+    var destRoot = Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "Content");
+    if (Directory.Exists(sourceRoot))
+    {
+        foreach (var file in Directory.GetFiles(sourceRoot, "*", SearchOption.AllDirectories))
+        {
+            var relativePath = Path.GetRelativePath(sourceRoot, file);
+            var destPath = Path.Combine(destRoot, relativePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(destPath)!);
+            File.Copy(file, destPath, true);
+        }
+        Console.WriteLine($"Copied Content folder to {destRoot}");
+    }
+}
+
 string frameworkDir = Path.Combine("FNAWasmRunner", "bin", "Release", "net10.0", "publish", "wwwroot", "_framework");
 Console.WriteLine("1) dotnet.runtime.*.js patch");
 Console.WriteLine("fixes mono init with -sWASMFS enabled");

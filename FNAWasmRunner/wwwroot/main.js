@@ -1,10 +1,10 @@
 
-const wasm = await eval(`import("/_framework/dotnet.js")`);
+const wasm = await eval(`import("./_framework/dotnet.js")`);
 const dotnet = wasm.dotnet;
 
 const preloadContentAssets = async (module) => {
 	// Fetch the file list dynamically from the server
-	const listResponse = await fetch("/content-files.json");
+	const listResponse = await fetch("./content-files.json");
 	if (!listResponse.ok) {
 		throw new Error(`Failed to fetch /content-files.json: ${listResponse.status}`);
 	}
@@ -29,7 +29,7 @@ const preloadContentAssets = async (module) => {
 			dir += "/" + parts[i];
 		}
 
-		const url = "/Content/" + parts.map(encodeURIComponent).join("/");
+		const url = "./Content/" + parts.map(encodeURIComponent).join("/");
 		const response = await fetch(url);
 		if (!response.ok) {
 			throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
