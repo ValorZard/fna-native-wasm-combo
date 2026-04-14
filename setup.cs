@@ -1,6 +1,16 @@
 using System.Diagnostics;
 using System.Net.Http;
 
+static void ForceDeleteDirectory(string path)
+{
+    // On windows, it's a bit annoying to delete directories containing read-only files, 
+    // so we have to make sure to clear the read-only flag on all files before deleting.
+    if (!Directory.Exists(path)) return;
+    foreach (var f in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+        File.SetAttributes(f, FileAttributes.Normal);
+    Directory.Delete(path, true);
+}
+
 bool doClean = false;
 for (int i = 0; i < args.Length; i++)
 {
@@ -14,12 +24,9 @@ for (int i = 0; i < args.Length; i++)
 if (doClean)
 {
     Console.WriteLine("Cleaning up...");
-    if (Directory.Exists("FNANative"))
-        Directory.Delete("FNANative", true);
-    if (Directory.Exists("FNAWasm"))
-        Directory.Delete("FNAWasm", true);
-    if (Directory.Exists("FontStashSharp"))
-        Directory.Delete("FontStashSharp", true);
+    ForceDeleteDirectory("FNANative");
+    ForceDeleteDirectory("FNAWasm");
+    ForceDeleteDirectory("FontStashSharp");
     Console.WriteLine("Finished cleaning up");
 }
 
@@ -51,17 +58,19 @@ Console.WriteLine("Finished applying patches");
 
 Console.WriteLine("Now downloading dependencies...");
 Console.WriteLine("Downloading FontStashSharp...");
+var fontStashRev = "1ce5d237f024e3f179e344d993f76353cbccb17e";
 var fontStashClone = new Process
 {
     StartInfo = new ProcessStartInfo
     {
         FileName = "git",
-        Arguments = "clone https://github.com/FontStashSharp/FontStashSharp.git --recursive",
+        Arguments = "clone https://github.com/FontStashSharp/FontStashSharp.git --single-branch --depth 1 --recursive --revision " + fontStashRev,
     }
 };
 fontStashClone.Start();
 fontStashClone.WaitForExit();
 Console.WriteLine("Finished downloading FontStashSharp");
+Console.WriteLine("Now applying FontStashSharp patches...");
 var fontStashPatch = new Process
 {
     StartInfo = new ProcessStartInfo
