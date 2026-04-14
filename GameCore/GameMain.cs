@@ -34,6 +34,7 @@ public class GameMain : Game
     private KeyboardState keyboardPrev = new KeyboardState();
     private Song song;
     private FontSystem _fontSystem;
+    private FrameCounter _frameCounter = new FrameCounter();
     
     protected override void Initialize()
     {
@@ -112,8 +113,12 @@ public class GameMain : Game
         batch.Begin();
         batch.Draw(texture, new Rectangle(100, 100, texture.Width / 5, texture.Height / 5), Color.White);
         SpriteFontBase font18 = _fontSystem.GetFont(18);
-        batch.DrawString(font18, "The quick brown fox\njumps over\nthe lazy dog", new Vector2(0, 0), Color.White);
+        var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        _frameCounter.Update(deltaTime);
 
+        var fpsString = $"FPS: {_frameCounter.AverageFramesPerSecond}";
+
+        batch.DrawString(font18, fpsString, new Vector2(1, 1), Color.Black);
         SpriteFontBase font30 = _fontSystem.GetFont(30);
         batch.DrawString(font30, "The quick brown fox\njumps over\nthe lazy dog", new Vector2(0, 80), Color.Yellow);
 
