@@ -1,6 +1,28 @@
 using System.Diagnostics;
 using System.Net.Http;
 
+bool doClean = false;
+for (int i = 0; i < args.Length; i++)
+{
+    if (args[i] == "clean")
+    {
+        doClean = true;
+        break;
+    }
+}
+
+if (doClean)
+{
+    Console.WriteLine("Cleaning up...");
+    if (Directory.Exists("FNANative"))
+        Directory.Delete("FNANative", true);
+    if (Directory.Exists("FNAWasm"))
+        Directory.Delete("FNAWasm", true);
+    if (Directory.Exists("FontStashSharp"))
+        Directory.Delete("FontStashSharp", true);
+    Console.WriteLine("Finished cleaning up");
+}
+
 String branch = "26.04";
 var nativeClone = new Process();
 var wasmClone = new Process();
@@ -14,7 +36,7 @@ nativeClone.WaitForExit();
 wasmClone.WaitForExit();
 Console.WriteLine("Finished cloning FNA");
 Console.WriteLine("Now applying patches...");
-var nativePatch = new Process
+var wasmPatch = new Process
 {
     StartInfo = new ProcessStartInfo
     {
@@ -23,8 +45,8 @@ var nativePatch = new Process
         WorkingDirectory = "FNAWasm",
     }
 };
-nativePatch.Start();
-nativePatch.WaitForExit();
+wasmPatch.Start();
+wasmPatch.WaitForExit();
 Console.WriteLine("Finished applying patches");
 
 Console.WriteLine("Now downloading dependencies...");
@@ -40,4 +62,15 @@ var fontStashClone = new Process
 fontStashClone.Start();
 fontStashClone.WaitForExit();
 Console.WriteLine("Finished downloading FontStashSharp");
-
+var fontStashPatch = new Process
+{
+    StartInfo = new ProcessStartInfo
+    {
+        FileName = "git",
+        Arguments = "apply ../FontStashSharp.patch",
+        WorkingDirectory = "FontStashSharp",
+    }
+};
+fontStashPatch.Start();
+fontStashPatch.WaitForExit();
+Console.WriteLine("Finished applying FontStashSharp patches");
