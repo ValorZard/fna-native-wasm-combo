@@ -5,6 +5,8 @@ However, the big catch is that we need to clone FNA twice, and then have one ver
 
 We also show how to import external dependencies that require FNA (like [FontStashSharp](https://github.com/FontStashSharp/FontStashSharp)) by patching them to choose what FNA to use on compile time.
 
+Note: You may get errors if you aren't on a new enough git (git 2.49 or newer)
+
 ## Initial setup for both wasm and native
 run ``dotnet run setup.cs``
 
