@@ -35,5 +35,11 @@ CSC : error CS2012: Cannot open 'C:\workspace\fna-game\FNAWasm\obj_core\Release\
 - Just retry the script again and it should work
 - The web version will exist on ``http://localhost:5000/``
 
+# Uploading WASM to itch.io
+zip up the wwwroot folder inside of the publish folder
+(on my computer that's inside of ``FNAWasmRunner\bin\Release\net10.0\publish\wwwroot``)
+and then upload it to itch.io (you want to make sure that ``index.html`` is root inside the zip)
+Also, you want to make sure that the SharedArrayBuffer option is turned on
+
 ## Notes
 Thanks to @r58Playz for the inspiration/borrowed code from [FNA-Wasm-Threads](https://github.com/r58Playz/fna-wasm-threads) to make this work
