@@ -148,6 +148,10 @@ Console.WriteLine("fixes mono init with -sWASMFS enabled");
 var runtimeFile = Directory.GetFiles(frameworkDir, "dotnet.runtime.*.js").FirstOrDefault();
 if (runtimeFile is not null)
 {
+    /*
+    https://github.com/dotnet/runtime/blob/19d0c6e4593d9b2ffd516b854662e53d4ef95d83/src/mono/browser/runtime/startup.ts#L312
+    if you have -sWASMFS enabled it throws an error (i think it's like no such file or directory?) on this call and that's the fix
+    */
     PatchFile(
         runtimeFile,
         "FS_createPath(\"/\",\"usr/share\",!0,!0)",
@@ -159,6 +163,12 @@ Console.WriteLine("automatically forces transfer of canvas matching selector `.c
 var nativeFile = Directory.GetFiles(frameworkDir, "dotnet.native.*.js").FirstOrDefault();
 if (nativeFile is not null)
 {
+    /*
+    this is a hack to give control of the game canvas to the c# main thread (dotnet-worker-001) 
+    because we don't control when the dotnet runtime creates the c# main thread so we can't use the emscripten api that does the same thing (emscripten_pthread_attr_settransferredcanvases)
+    it just forces a transfer of .canvas to the first thread created which happens to be c# main thread, patching emscripten pthread_create's js side 
+    see: https://github.com/emscripten-core/emscripten/blob/3.1.56/src/library_pthread.js#L782
+    */
     PatchFile(
         nativeFile,
         "var offscreenCanvases={};",
