@@ -15,9 +15,6 @@ partial class Program
         Console.WriteLine("Hi!");
     }
 
-    [DllImport("Emscripten")]
-    public extern static int mount_opfs();
-
     static GameMain game;
     static FieldInfo RunApplication;
     public static bool firstLaunch = true;
@@ -27,14 +24,6 @@ partial class Program
     {
         return Task.Run(() =>
         {
-            Console.WriteLine("calling mount_opfs");
-            int ret = mount_opfs();
-            Console.WriteLine($"called mount_opfs: {ret}");
-            if (ret != 0)
-            {
-                throw new Exception("Failed to mount OPFS");
-            }
-
             Environment.SetEnvironmentVariable("FNA_PLATFORM_BACKEND", "SDL3");
         });
     }

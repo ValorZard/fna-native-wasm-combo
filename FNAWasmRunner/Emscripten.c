@@ -6,16 +6,6 @@
 #include <assert.h>
 #include <stdint.h>
 
-int mount_opfs() {
-	emscripten_console_log("mount_opfs: starting");
-	backend_t opfs = wasmfs_create_opfs_backend();
-	emscripten_console_log("mount_opfs: created opfs backend");
-	int ret = wasmfs_create_directory("/libsdl", 0777, opfs);
-	emscripten_console_log("mount_opfs: mounted opfs");
-	return ret;
-}
-
-
 // needed because of upstream mono bug: https://github.com/dotnet/runtime/issues/112262
 void *SDL_CreateWindow(char *title, int w, int h, uint64_t flags);
 void *SDL__CreateWindow(char *title, int w, int h, unsigned int flags) {
